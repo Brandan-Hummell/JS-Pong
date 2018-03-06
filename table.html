@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="styles/table.css">
+    </head>
+    <body onload="render_game()">
+        <canvas id="pongTable" width="600" height="400"></canvas>
+        <script>
+            var p_canvas = document.getElementById("pongTable");
+            var p_context = p_canvas.getContext("2d");
+
+            function Player(x, y, width, height) {
+                this.x_position = x;
+                this.y_position = y;
+                this.width = width;
+                this.height = height;
+                this.render = function() {
+                     p_context.fillRect(this.x_position, this.y_position, this.width, this.height);
+                }
+            }
+            function Computer(x, y, width, height) {
+                this.x_position = x;
+                this.y_position = y;
+                this.width = width;
+                this.height = height;
+                this.render = function() {
+                     p_context.fillRect(this.x_position, this.y_position, this.width, this.height);
+                }
+            }
+            function Ball(x, y, radius) {
+                this.x_position = x;
+                this.y_position = y;
+                this.radius = radius;
+                this.start_angle = 0;
+                this.end_angle = 2 * Math.PI;
+                this.render = function() {
+                    p_context.beginPath();
+                    p_context.arc(this.x_position, this.y_position, this.radius, this.start_angle, this.end_angle, false);
+                    p_context.fill();
+                }
+            }
+            var left_paddle = new Player(25, 100, 25, 100);
+            var right_paddle = new Computer(550, 100, 25, 100);
+            var pong_ball = new Ball(300, 200, 15);
+            var render_game = function() {
+                left_paddle.render();
+                right_paddle.render();
+                pong_ball.render();
+            }
+
+        </script>
+
+    </body>
+</html>
