@@ -14,6 +14,7 @@ function Player(x, y, width, height) {
     this.width = width;
     this.height = height;
     this.speed = 15;
+    this.score = 0;
     this.move_up = function() {
         if (this.y_position <= 0) {
             this.y_position = 0;
@@ -39,15 +40,33 @@ function Computer(x, y, width, height) {
     this.y_position = y;
     this.width = width;
     this.height = height;
+    this.speed = 1;
+    this.score = 0;
     this.render = function() {
          p_context.fillRect(this.x_position, this.y_position, this.width, this.height);
+    }
+    this.update = function() {
+        if (this.y_position < 0) {
+            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            this.y_position = 0;
+        } else if (this.y_position > (p_canvas.height - this.height)) {
+            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            this.y_position = (p_canvas.height - this.height);
+        } else if ((this.y_position + (height / 2)) < pong_ball.y_position) {
+            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            this.y_position += this.speed;
+        } else if ((this.y_position + (height / 2)) > pong_ball.y_position) {
+            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            this.y_position -= this.speed;
+        }
+        this.render()
     }
 }
 function Ball(x, y, radius) {
     this.x_position = x;
     this.y_position = y;
-    this.h_speed = ((Math.floor(Math.random() * 10) - 5));
-    this.v_speed = ((Math.floor(Math.random() * 10) - 5));
+    this.h_speed = -5;
+    this.v_speed = ((Math.floor(Math.random() * 8) - 4));
     this.radius = radius;
     this.start_angle = 0;
     this.end_angle = 2 * Math.PI;
@@ -57,7 +76,16 @@ function Ball(x, y, radius) {
         p_context.fill();
         p_context.closePath();
     }
+    this.serveReset = function() {
+        this.h_speed = -5;
+        this.v_speed = ((Math.floor(Math.random() * 8) - 4) * 2);
+        this.x_position = 500;
+        this.y_position = 300;
+    }
     this.serve = function() {
+        if (this.v_speed == 0) {
+            this.v_speed += 3;
+        }
         p_context.globalCompositeOperation="destination-out";
         p_context.beginPath();
         p_context.arc(this.x_position, this.y_position, this.radius + 1, this.start_angle, this.end_angle, false);
@@ -73,25 +101,34 @@ function Ball(x, y, radius) {
         } else {
             this.y_position += this.v_speed;
         }
-        if ((this.x_position + this.radius >= (right_paddle.x_position)) && (this.x_position <= (right_paddle.x_position + right_paddle.width)) && (this.y_position >= right_paddle.y_position && this.y_position <= (right_paddle.y_position + right_paddle.height))) {
-            this.h_speed = this.h_speed * (-1.05);
+        if ((this.x_position + this.radius >= (right_paddle.x_position)) && (this.x_position <= (right_paddle.x_position + right_paddle.width / 10)) && (this.y_position >= right_paddle.y_position && this.y_position <= (right_paddle.y_position + right_paddle.height))) {
+            this.h_speed = this.h_speed * (-1);
             this.x_position += this.h_speed;
-        } else if ((this.x_position - this.radius <= (left_paddle.x_position + left_paddle.width)) && (this.x_position >= (left_paddle.x_position)) && (this.y_position >= left_paddle.y_position && this.y_position <= (left_paddle.y_position + left_paddle.height))) {
-            this.h_speed = this.h_speed * (-1.05);
+        } else if ((this.x_position - this.radius <= (left_paddle.x_position + left_paddle.width)) && (this.x_position >= (left_paddle.x_position + left_paddle.width * 0.8)) && (this.y_position >= left_paddle.y_position && this.y_position <= (left_paddle.y_position + left_paddle.height))) {
+            this.h_speed = this.h_speed * (-1);
             this.x_position += this.h_speed;
         } else {
             this.x_position += this.h_speed;
         }
 
+        if ((this.x_position - this.radius) >= p_canvas.width) {
+            left_paddle.score += 1;
+            this.serveReset();
+        }
+        if ((this.x_position + this.radius) <= 0) {
+            right_paddle.score += 1;
+            this.serveReset();
+        }
+
         this.render();
     }
 }
-var left_paddle = new Player(25, 100, 25, 100);
-var right_paddle = new Computer(550, 100, 25, 100);
-var pong_ball = new Ball(300, 200, 15);
+var left_paddle = new Player(25, 250, 25, 100);
+var right_paddle = new Computer(750, 250, 25, 100);
+var pong_ball = new Ball(400, 250, 15);
 var render_game = function() {
     left_paddle.render();
-    right_paddle.render();
+    right_paddle.update();
     pong_ball.serve();
 }
 window.addEventListener('keydown', function(e) {
