@@ -19,7 +19,7 @@ function Player(x, y, width, height) {
         if (this.y_position <= 0) {
             this.y_position = 0;
         } else {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position -= this.speed;
         }  
     }
@@ -27,7 +27,7 @@ function Player(x, y, width, height) {
         if (this.y_position >= (p_canvas.height - this.height)) {
             this.y_position = (p_canvas.height - this.height);
         } else {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position += this.speed;
         }  
     }
@@ -47,16 +47,16 @@ function Computer(x, y, width, height) {
     }
     this.update = function() {
         if (this.y_position < 0) {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position = 0;
         } else if (this.y_position > (p_canvas.height - this.height)) {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position = (p_canvas.height - this.height);
         } else if ((this.y_position + (height / 2)) < pong_ball.y_position) {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position += this.speed;
         } else if ((this.y_position + (height / 2)) > pong_ball.y_position) {
-            p_context.clearRect(this.x_position, this.y_position, this.width, this.height);
+            p_context.clearRect(this.x_position - 1, this.y_position - 1, this.width + 1, this.height + 1);
             this.y_position -= this.speed;
         }
         this.render()
@@ -65,7 +65,7 @@ function Computer(x, y, width, height) {
 function Ball(x, y, radius) {
     this.x_position = x;
     this.y_position = y;
-    this.h_speed = -5;
+    this.h_speed = -4;
     this.v_speed = ((Math.floor(Math.random() * 8) - 4));
     this.radius = radius;
     this.start_angle = 0;
