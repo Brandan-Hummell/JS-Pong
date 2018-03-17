@@ -114,12 +114,22 @@ function Ball(x, y, radius) {
         if ((this.x_position - this.radius) >= p_canvas.width) {
             left_paddle.score += 1;
             left_score.innerHTML = "Player's score: " + left_paddle.score;
-            this.serveReset();
+            if (left_paddle.score < 11) {
+              this.serveReset();
+            } else {
+                left_score.innerHTML = "You Won! Refresh the page to play again!"
+                right_score.innerHTML = ""
+            }
         }
         if ((this.x_position + this.radius) <= 0) {
             right_paddle.score += 1;
             right_score.innerHTML = "Computer's score: " + right_paddle.score;
-            this.serveReset();
+            if (right_paddle.score < 11) {
+              this.serveReset();
+            } else {
+                left_score.innerHTML = "You Lost! Refresh the page to play again!"
+                right_score.innerHTML = ""
+            }
         }
 
         this.render();
