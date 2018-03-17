@@ -1,3 +1,19 @@
 #pongTable {
     border: 5px solid black;
 }
+
+#leftScore {
+    display: inline-block;
+    text-align: left;
+    min-width: 400px;
+}
+
+#rightScore {
+    display: inline-block;
+    text-align: right;
+    min-width: 400px;   
+}
+
+#scoreBox {
+    min-width: 800px;
+}

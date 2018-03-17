@@ -113,10 +113,12 @@ function Ball(x, y, radius) {
 
         if ((this.x_position - this.radius) >= p_canvas.width) {
             left_paddle.score += 1;
+            left_score.innerHTML = "Player's score: " + left_paddle.score;
             this.serveReset();
         }
         if ((this.x_position + this.radius) <= 0) {
             right_paddle.score += 1;
+            right_score.innerHTML = "Computer's score: " + right_paddle.score;
             this.serveReset();
         }
 
@@ -139,3 +141,8 @@ window.addEventListener('keydown', function(e) {
         left_paddle.move_down();
     }
 })
+
+left_score = document.getElementById("leftScore");
+right_score = document.getElementById("rightScore");
+left_score.innerHTML = "Player's score: " + left_paddle.score;
+right_score.innerHTML = "Computer's score: " + right_paddle.score;
